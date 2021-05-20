@@ -1,12 +1,14 @@
-# Native range estimates for unmapped red-listed vascular plant species
-
-![Range map examples - Animated gif demo](demo/slideshow.gif)
+## Native range estimates for red-listed vascular plant species
 
 Distribution data for individual species (e.g. range maps) are central for understanding both global biodiversity patterns and associated anthropogenic impacts. Our aim is to provide a comprehensive set of spatial data for a large number of, so far unmapped, vascular plant species, supporting the development of future assessments of global biodiversity impacts and distributions.
 
+
+![Range map examples - Maxent predictions transformed into potential binary range maps at different levels of confidence using different cut-off thresholds](demo/slideshow.gif)
+
+
 ## Data
 
-The dataset consists of native regions retrieved from [Plants of the World online](http://plantsoftheworldonline.org/) for 47,675 species, density of available native occurrence records from [GBIF](https://www.gbif.org/) for 30,906 species, and standardized, large-scale [Maxent](https://biodiversityinformatics.amnh.org/open_source/maxent/) range estimates for 27,208 species, highlighting environmentally suitable areas within species' native regions. Maxent models are available as R objects upon request.
+The dataset consists of native regions retrieved from [Plants of the World online](http://plantsoftheworldonline.org/) for 47,675 species, density of available native occurrence records from [GBIF](https://www.gbif.org/) for 30,906 species, and standardized, large-scale [Maxent](https://biodiversityinformatics.amnh.org/open_source/maxent/) range estimates for 27,208 species, highlighting environmentally suitable areas within species' native regions. The data can be explored here: [https://plant-ranges.indecol.no/](https://plant-ranges.indecol.no/). Maxent models are available as R objects upon request.
 
 ### Maxent Predictions
 
