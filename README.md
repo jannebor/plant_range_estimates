@@ -1,16 +1,14 @@
 ## Native range estimates for red-listed vascular plant species
 
-Distribution data for individual species (e.g. range maps) are central for understanding both global biodiversity patterns and associated anthropogenic impacts. Our aim is to provide a comprehensive set of spatial data for a large number of, so far unmapped, vascular plant species, supporting the development of future assessments of global biodiversity impacts and distributions.
+Distribution data for individual species (e.g. range maps) is central for understanding both global biodiversity patterns and associated anthropogenic impacts. Our aim is to provide a comprehensive set of spatial data for a large number of, so far unmapped, vascular plant species, supporting the development of future assessments of global biodiversity impacts and distributions.
 
 
 ![Range map examples - Maxent predictions transformed into potential binary range maps at different levels of confidence using different cut-off thresholds](demo/slideshow.gif)
 
 
-## Data
+### Dataset
 
-The dataset consists of native regions retrieved from [Plants of the World online](http://plantsoftheworldonline.org/) for 47,675 species, density of available native occurrence records from [GBIF](https://www.gbif.org/) for 30,906 species, and standardized, large-scale [Maxent](https://biodiversityinformatics.amnh.org/open_source/maxent/) range estimates for 27,208 species, highlighting environmentally suitable areas within species' native regions. The data can be explored here: [https://plant-ranges.indecol.no/](https://plant-ranges.indecol.no/). Maxent models are available as R objects upon request.
-
-### Maxent Predictions
+The dataset consists of native regions for 47,675 species retrieved from [Plants of the World online](http://plantsoftheworldonline.org/), density of available native occurrence records for 30,906 species retrieved from [GBIF](https://www.gbif.org/), and standardized, large-scale [Maxent](https://biodiversityinformatics.amnh.org/open_source/maxent/) range estimates for 27,208 species, highlighting environmentally suitable areas within species' native regions. The data can be explored using our  [data explorer](https://plant-ranges.indecol.no/).
 
 The full dataset can be downloaded [here](https://www.dropbox.com/sh/meeb6ru84778k94/AADrdCleHeMujip60C7EuMH1a?dl=1) at 30 arc minutes spatial resolution (approx. 56 km at the equator).
 
@@ -19,6 +17,8 @@ The full dataset can be downloaded [here](https://www.dropbox.com/sh/meeb6ru8477
 ["range_estimates_suggested.nc"](https://www.dropbox.com/s/9az5yoq4ayx0139/range_estimates_suggested.nc?dl=1) contains only the best performing prediction for each species, selected based on AUC and AUC<sub>PR</sub>.
 
 The [metadata](https://www.dropbox.com/s/ktf1pk6hsk62d80/metadata_full.csv?dl=1) can be used to select appropriate cut-off thresholds for generating binary range maps, filter models based on species, performance or desired data types, and to look up the relevant study extent for masking individual predictions.
+
+Underlying Maxent models are available as R objects upon request.
 
 For information about the given thresholds visit <https://www.rdocumentation.org/packages/dismo/versions/1.1-4/topics/threshold>.
 
@@ -63,14 +63,14 @@ plot(pred_ras_cropped)
 
 ```
 
-## Metadata
+### Metadata
 
-### General species information
+#### General species information
 
 speciesID, scientificname, redlistcategory, rank, family, order, class, subdivision, division, and data (type of provided data out of Native region, Occurrence records or Maxent prediction)
 
 
-### Original extent of native regions, e.g. for cropping bands of the netCDF file:
+#### Original extent of native regions, e.g. for cropping bands of the netCDF file:
 
 extent.xmin: Minimum x-value of the original study extent
 
@@ -81,14 +81,14 @@ extent.ymin: Minimum y-value of the original study extent
 extent.ymax: Maximum y-value of the original study extent
 
 
-### Occurrence data
+#### Occurrence data
 
 moransI: Moran's Index based on the raw occurrence data
 
 raw.points: Number of raw occurrence points for the given species
 
 
-### Maxent settings
+#### Maxent settings
 
 n.points: Number of occurrence points used for training the given model
 
@@ -113,7 +113,7 @@ n.variables: Number of variables considered in the given model
 variables: Variables considered in the given model
 
 
-### Maxent performance
+#### Maxent performance
 
 train.AUC: obtained AUC during model calibration
 
@@ -146,7 +146,7 @@ ref.AUCPR: AUC<sub>PR</sub> values based on comparison to expert-based reference
 ref.maxF1: Maximum F<sub>1</sub>-score based on comparison to expert-based reference range map
 
 
-### Potential thresholds for converting Maxent range estimates into binary range maps
+#### Potential thresholds for converting Maxent range estimates into binary range maps
 
 cutoff.kappa: Threshold that maximizes kappa
 
