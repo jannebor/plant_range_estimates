@@ -5,6 +5,7 @@ library(taxize)
 library(rvest)
 library(stringr)
 library(rgeos)
+library(raster)
 
 load("data/tdwg_level4")
 load("data/tdwg_conversion_scheme")
@@ -202,10 +203,10 @@ get_native_regions<-function(species){
     for(y in 1:length(wgsrpd_regional_list)){
       if(length(nat_reg)==0){
         nat_reg<-subset(tdwg_level4, tdwg_level4$Level4_cod==wgsrpd_regional_list[y])
-        nat_reg <- aggregate(nat_reg)
+        nat_reg <- raster::aggregate(nat_reg)
       } else {
         t_add<-subset(tdwg_level4, tdwg_level4$Level4_cod==wgsrpd_regional_list[y])
-        t_add <- aggregate(t_add)
+        t_add <- raster::aggregate(t_add)
         nat_reg<-gUnion(t_add, nat_reg)
       }
     }
