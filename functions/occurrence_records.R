@@ -1,10 +1,7 @@
 ### R version 4.0.3
 ## code for retrieving occurrence records from GBIF
 # requires output of native_regions.R
-
-
 library(rgbif)
-
 
 get_occurrence_records<-function(species, native_regions){
   
@@ -95,7 +92,6 @@ get_occurrence_records<-function(species, native_regions){
 
 
 }
-
 
 # usage
 occurrence_records<-get_occurrence_records("Amomum pterocarpum", native_regions)
