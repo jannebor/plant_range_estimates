@@ -6,7 +6,7 @@ Distribution data for individual species (e.g. range maps) are central for under
 
 ## Data
 
-The dataset consists of native regions retrieved from [Plants of the World online](http://plantsoftheworldonline.org/) for 47,675 species, density of available native occurrence records from [GBIF](https://www.gbif.org/) for 30,906 species, and standardized, large-scale [Maxent](https://biodiversityinformatics.amnh.org/open_source/maxent/) range estimates for 27,208 species, highlighting environmentally suitable areas within species' native regions. Maxent models are available as R objects upon request.
+The dataset consists of native regions retrieved from [Plants of the World online](http://plantsoftheworldonline.org/){:target="_blank"} for 47,675 species, density of available native occurrence records from [GBIF](https://www.gbif.org/) for 30,906 species, and standardized, large-scale [Maxent](https://biodiversityinformatics.amnh.org/open_source/maxent/) range estimates for 27,208 species, highlighting environmentally suitable areas within species' native regions. Maxent models are available as R objects upon request.
 
 ### Maxent Predictions
 
