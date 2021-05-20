@@ -151,7 +151,6 @@ background_points <- spTransform(background_points,CRS("+proj=longlat +datum=WGS
 generate_maxent_prediction <- function(species, occurrence_records, native_regions, 
                                        environmental_predictors, parallel, ncores, 
                                        background_points, fishnet){
-  
   wgsrpd_regional_list<-native_regions[[3]]
   wgsrpd_country_list<-native_regions[[2]]
   nat_reg<-native_regions[[1]]
@@ -159,6 +158,8 @@ generate_maxent_prediction <- function(species, occurrence_records, native_regio
   nat_reg_mask <- fishnet[!is.na(sp::over(fishnet, sp::geometry(nat_reg))), ] 
   crop_environmental_predictors<-crop(environmental_predictors, nat_reg_mask)
   crop_environmental_predictors<- mask(crop_environmental_predictors, nat_reg_mask)
+  
+  
   
   
   # select background points in native regions
@@ -235,7 +236,7 @@ generate_maxent_prediction <- function(species, occurrence_records, native_regio
       background_data <- data.frame(raster::extract(crop_environmental_predictors, background_points_nat_reg, fun=mean, na.rm=TRUE), presence=0)
       
       evaluate_model0 <- dismo::evaluate(presence_data_raw, background_data, model0)
-      thresholds_model0 <- dismo::threshold(evaluate_model0)
+      threshold_model0 <- dismo::threshold(evaluate_model0)
       
       selectEVs <-  var.importance(model0)
       
@@ -397,43 +398,33 @@ generate_maxent_prediction <- function(species, occurrence_records, native_regio
           
         }} 
       
+      eval_results<-list(model0_eval_results,model1_eval_results,model2_eval_results,model3_eval_results)
+      names(eval_results)<-c("Model0","Model1","Model2","Model3")
+      model_results<-list(model0_results,model1_results,model2_results,model3_results)
+      names(model_results)<-c("Model0","Model1","Model2","Model3")
+      models<-list(model0,model1,model2,model3)
+      names(models)<-c("Model0","Model1","Model2","Model3")
+      EVs<-list(selectEVs,rawEVs,cellEVs,thinEVs)
+      names(EVs)<-c("Model0","Model1","Model2","Model3")
+      predictions<-list(prediction_model0,prediction_model1,prediction_model2,prediction_model3)
+      names(predictions)<-c("Model0","Model1","Model2","Model3")
+      evaluate<-list(evaluate_model0,evaluate_model1,evaluate_model2,evaluate_model3)
+      names(evaluate)<-c("Model0","Model1","Model2","Model3")
+      thresholds<-list(threshold_model0,threshold_model1,threshold_model2,threshold_model3)
+      names(thresholds)<-c("Model0","Model1","Model2","Model3")
       
-      
-      return(c(model0_eval_results,
-               model0_results,
-               model0,
-               selectEVs,
-               prediction_model0,
-               evaluate_model0,
-               thresholds_model0,
-               model1_eval_results,
-               model1_results,
-               model1,
-               rawEVs,
-               prediction_model1,
-               evaluate_model1,
-               threshold_model1,
-               model2_eval_results,
-               model2_results,
-               model2,
-               cellEVs,
-               prediction_model2,
-               evaluate_model2,
-               threshold_model2,
-               model3_eval_results,
-               model3_results,
-               model3,
-               thinEVs,
-               prediction_model3,
-               evaluate_model3,
-               threshold_model3)
-      )
+      data_list<-list(eval_results, model_results, models, EVs, predictions, evaluate, thresholds)
+      names(data_list)<-c("eval_results", "model_results", "models", "EVs", "predictions", "evaluate", "thresholds")
+      return(data_list)
       
     }}
 }
 
 
 ## usage
-maxent_prediction<-generate_maxent_prediction("Amomum pterocarpum", occurrence_records, native_regions, environmental_predictors, parallel = TRUE, ncores = 2, background_points, fishnet)
+maxent_prediction<-generate_maxent_prediction("Amomum pterocarpum", occurrence_records, 
+                                              native_regions, environmental_predictors, 
+                                              parallel = TRUE, ncores = 6, background_points, fishnet)
 
-plot(maxent_prediction[[5]])
+plot(maxent_prediction$predictions$Model1)
+plot(occurrence_records, add=T)
