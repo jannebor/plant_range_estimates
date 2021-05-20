@@ -5,6 +5,7 @@
 library(spThin)
 library(ENMeval)
 library(dismo)
+library(sp)
 
 rem_correlations <-  function(predictors, backgroundpoints, selectEVs, correlationthreshold){
   # variables that are correlated with a correlation coefficient higher than the 'correlationthreshold' will be  excluded
@@ -151,20 +152,17 @@ background_points <- spTransform(background_points,CRS("+proj=longlat +datum=WGS
 generate_maxent_prediction <- function(species, occurrence_records, native_regions, 
                                        environmental_predictors, parallel, ncores, 
                                        background_points, fishnet){
+ 
   wgsrpd_regional_list<-native_regions[[3]]
   wgsrpd_country_list<-native_regions[[2]]
   nat_reg<-native_regions[[1]]
   
   nat_reg_mask <- fishnet[!is.na(sp::over(fishnet, sp::geometry(nat_reg))), ] 
-  crop_environmental_predictors<-crop(environmental_predictors, nat_reg_mask)
-  crop_environmental_predictors<- mask(crop_environmental_predictors, nat_reg_mask)
-  
-  
-  
+  crop_environmental_predictors <- raster::crop(environmental_predictors, extent(nat_reg_mask))
+  crop_environmental_predictors <- raster::mask(crop_environmental_predictors, nat_reg_mask)
   
   # select background points in native regions
   background_points_nat_reg <- background_points[!is.na(sp::over(background_points, sp::geometry(nat_reg_mask))), ] 
-  
   
   # raw occurrence data for Model 1
   occ_points_raw<-occurrence_records
@@ -183,8 +181,9 @@ generate_maxent_prediction <- function(species, occurrence_records, native_regio
   thinned_presence_cells[!is.na(thinned_presence_cells)]<-1
   thinned_presence_cells<-raster::rasterToPoints(thinned_presence_cells)
   sds<-NULL
+  
   # spatial thinning at the distance of approx. 2 cells
-  sds<-suppressWarnings(thin.algorithm(data.frame(coordinates(thinned_presence_cells)),55.66*1.99999, rep=1))
+  sds<-suppressWarnings(spThin::thin.algorithm(data.frame(coordinates(thinned_presence_cells)),55.66*1.99999, rep=1))
   thinned_presence_cells<-SpatialPoints(data.frame(x=sds[[1]][1], y=sds[[1]][2]), 
                                         proj4string=CRS("+proj=longlat +datum=WGS84"))
   thinned_presence_cells<-thinned_presence_cells
@@ -212,6 +211,7 @@ generate_maxent_prediction <- function(species, occurrence_records, native_regio
     }
     
     
+    
     if(length(eval)>0){
       
       model0_eval_results<-eval@results
@@ -228,7 +228,11 @@ generate_maxent_prediction <- function(species, occurrence_records, native_regio
       }
       
       
-      prediction_model0 <- raster::predict(crop_environmental_predictors, model0)
+      prediction_model0 <- dismo::predict(model0, crop_environmental_predictors, args = c("outputformat=cloglog"), na.rm = TRUE)
+
+      
+      prediction_model0_enm <- eval@predictions[[which(eval@results$settings==model0_results$settings)[1]]]
+      prediction_model0_enm2<-ENMeval::maxnet.predictRaster(model0, crop_environmental_predictors)
       
       presence_data_raw <- data.frame(raster::extract(crop_environmental_predictors, occ_points_raw, fun=mean, na.rm=TRUE), presence=1)
       presence_data_raw<-na.exclude(presence_data_raw)
@@ -284,7 +288,7 @@ generate_maxent_prediction <- function(species, occurrence_records, native_regio
           model1 <- eval@models[[which(eval@results$settings==model1_results$settings)[1]]]
         }
         
-        prediction_model1 <- raster::predict(crop_environmental_predictors, model1)
+        prediction_model1 <- dismo::predict(model1, crop_environmental_predictors, args = c("outputformat=cloglog"), na.rm = TRUE)
         
         evaluate_model1 <- dismo::evaluate(presence_data_raw, background_data, model1)
         threshold_model1 <- dismo::threshold(evaluate_model1)
@@ -334,7 +338,7 @@ generate_maxent_prediction <- function(species, occurrence_records, native_regio
           presence_data_cells <- data.frame(raster::extract(crop_environmental_predictors, presence_cells, fun=mean, na.rm=TRUE), presence=1)
           presence_data_cells <- na.exclude(presence_data_cells)
           
-          prediction_model2 <- raster::predict(crop_environmental_predictors, model2)
+          prediction_model2 <- dismo::predict(model2, crop_environmental_predictors, args = c("outputformat=cloglog"), na.rm = TRUE)
           
           evaluate_model2 <- dismo::evaluate(presence_data_cells, background_data, model2)
           threshold_model2 <- dismo::threshold(evaluate_model2)
@@ -388,7 +392,7 @@ generate_maxent_prediction <- function(species, occurrence_records, native_regio
           training_data_raw <- rbind(presence_data_raw, background_data)
           training_data_raw <- na.exclude(training_data_raw)
           
-          prediction_model3 <- raster::predict(crop_environmental_predictors, model3)
+          prediction_model3 <- dismo::predict(model3, crop_environmental_predictors, args = c("outputformat=cloglog"), na.rm = TRUE)
           evaluate_model3 <- dismo::evaluate(presence_data_thinned, background_data, model3)
           threshold_model3 <- dismo::threshold(evaluate_model3)
           thinEVs <-  var.importance(model3)
