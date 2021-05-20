@@ -273,6 +273,7 @@ generate_maxent_prediction <- function(species, occurrence_records, native_regio
       evaluate_model1<-NULL
       threshold_model1<-NULL
       rawEVs<-NULL
+      model1_eval_results<-NULL
       
       if(length(eval)>0){
         
@@ -297,6 +298,15 @@ generate_maxent_prediction <- function(species, occurrence_records, native_regio
         
       }
       
+      
+      model2_results<-NULL
+      model2<-NULL
+      prediction_model2<-NULL
+      evaluate_model2<-NULL
+      threshold_model2<-NULL
+      cellEVs<-NULL
+      model2_eval_results<-NULL
+      
       if(length(presence_cells)>=5){
         
         eval<-NULL
@@ -313,13 +323,6 @@ generate_maxent_prediction <- function(species, occurrence_records, native_regio
         }
         
         
-        
-        model2_results<-NULL
-        model2<-NULL
-        prediction_model2<-NULL
-        evaluate_model2<-NULL
-        threshold_model2<-NULL
-        cellEVs<-NULL
         
         if(length(eval)>0){
           
@@ -348,6 +351,13 @@ generate_maxent_prediction <- function(species, occurrence_records, native_regio
         
       }
       
+      model3_results<-NULL
+      model3<-NULL
+      prediction_model3<-NULL
+      evaluate_model3<-NULL
+      threshold_model3<-NULL
+      thinEVs<-NULL
+      model3_eval_results<-NULL
       
       if(length(thinned_presence_cells)>=5){
         
@@ -365,11 +375,7 @@ generate_maxent_prediction <- function(species, occurrence_records, native_regio
         }
         
         
-        model3<-NULL
-        prediction_model3<-NULL
-        evaluate_model3<-NULL
-        threshold_model3<-NULL
-        thinEVs<-NULL
+    
         
         if(length(eval)>0){
           
@@ -427,7 +433,7 @@ generate_maxent_prediction <- function(species, occurrence_records, native_regio
 ## usage
 maxent_prediction<-generate_maxent_prediction("Amomum pterocarpum", occurrence_records, 
                                               native_regions, environmental_predictors, 
-                                              parallel = TRUE, ncores = 6, background_points, fishnet)
+                                              parallel = TRUE, ncores = 4, background_points, fishnet)
 summary(maxent_prediction)
 
 plot(maxent_prediction$predictions$Model1)
