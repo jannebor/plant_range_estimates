@@ -36,6 +36,7 @@ metadata<-read.csv(".../metadata.csv")
 
 # for a given species, e.g.:
 species_name <- "Amomum pterocarpum"
+
 # speciesID
 speciesID <- metadata$speciesID[which(metadata$scientificname==species_name)][1]
 # type of provided data
@@ -44,11 +45,12 @@ metadata$data[which(metadata$scientificname==species_name)][1]
 best_model <- metadata$model[which(metadata$scientificname==species_name)][1]
 # can be looked up in the metadata
 
-# each band of the netCDF file assembles data for one species, variables represent the different data types within each band:
-
+# each band of the netCDF file assembles data for one species
+# variables represent the different data types within each band
 variable <- paste(best_model)
-# varname needs to be one of "Native region", "Presence cells", or a specific Model: "Model 1", "Model 2", "Model 3"
+
 ras <- raster("C:/Users/janbor/Documents/GitLab/plant_ranges/app/demo/range_data.nc", varname = variable, band = speciesID)
+# varname needs to be one of "Native region", "Presence cells", or a specific Model: "Model 1", "Model 2", "Model 3"
 
 plot(ras)
 
