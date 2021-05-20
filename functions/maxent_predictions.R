@@ -214,7 +214,6 @@ generate_maxent_prediction <- function(species, occurrence_records, native_regio
     
     if(length(eval)>0){
       
-      
       model0_eval_results<-eval@results
       
       # select the best model based on AICc if this metric is available for more than 50% of generated models
@@ -425,6 +424,8 @@ generate_maxent_prediction <- function(species, occurrence_records, native_regio
 maxent_prediction<-generate_maxent_prediction("Amomum pterocarpum", occurrence_records, 
                                               native_regions, environmental_predictors, 
                                               parallel = TRUE, ncores = 6, background_points, fishnet)
+summary(maxent_prediction)
 
 plot(maxent_prediction$predictions$Model1)
-plot(occurrence_records, add=T)
+
+str(maxent_prediction)
