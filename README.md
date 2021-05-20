@@ -31,43 +31,83 @@ Species selection based on metadata:
 ```{r setup, include = FALSE}
 library(raster)
 
+# metadata of the suggested dataset (only the best prediction for each species)
 metadata<-read.csv(".../metadata.csv")
-#or
-metadata_full<-read.csv(".../metadata_full.csv")
 
+# for a given species, e.g.:
 species_name <- "Amomum pterocarpum"
-
-###speciesIDs can be looked up in the metadata
+# speciesID
 speciesID <- metadata$speciesID[which(metadata$scientificname==species_name)][1]
+# type of provided data
+metadata$data[which(metadata$scientificname==species_name)][1]
+# and, if a Maxent prediction has been generated, the best performing model
+best_model <- metadata$model[which(metadata$scientificname==species_name)][1]
+# can be looked up in the metadata
 
-pred_ras <- raster(".../range_estimates_suggested.nc", band = speciesID)
-#or
-pred_ras <- raster(".../range_estimates.nc", varname = "Model 3", band = speciesID)
-###varname needs to be "Model 1", "Model 2" or "Model 3"; "Occurrence records"; "Native region"
+# each band of the netCDF file assembles data for one species, variables represent the different data types within each band:
 
-plot(pred_ras)
+variable <- paste(best_model)
+# varname needs to be one of "Native region", "Presence cells", or a specific Model: "Model 1", "Model 2", "Model 3"
+ras <- raster("C:/Users/janbor/Documents/GitLab/plant_ranges/app/demo/range_data.nc", varname = variable, band = speciesID)
+
+plot(ras)
 
 
 ```
-
-Cropping the predictions to original extent:
+All bands in the netCDF file have the same spatial extent, to crop to species-specific extents:
 
 ```{r setup, include = FALSE}
 
-pred_ras_cropped<-crop(pred_ras, extent(metadata$extent.xmin[which(metadata$scientificname==species_name)][1],
-                      metadata$extent.xmax[which(metadata$scientificname==species_name)][1],
-                      metadata$extent.ymin[which(metadata$scientificname==species_name)][1],
-                      metadata$extent.ymax[which(metadata$scientificname==species_name)][1]))
-
-plot(pred_ras_cropped)
+ras<-crop(ras, extent(metadata$extent.xmin[which(metadata$speciesID==speciesID)][1],
+                                        metadata$extent.xmax[which(metadata$speciesID==speciesID)][1],
+                                        metadata$extent.ymin[which(metadata$speciesID==speciesID)][1],
+                                        metadata$extent.ymax[which(metadata$speciesID==speciesID)][1]))
+plot(ras)
 
 ```
+
+
+
+the above described steps summarized in a function:
+
+```{r setup, include = FALSE}
+
+read_data<-function(variables, speciesID, filelocation){
+  
+  ras<-stack()
+  
+  for(v in variables){
+  ras<-stack(ras,raster(filelocation, varname = v, band = speciesID))
+  }
+  
+  return(crop(ras, extent(metadata$extent.xmin[which(metadata$speciesID==speciesID)][1],
+                          metadata$extent.xmax[which(metadata$speciesID==speciesID)][1],
+                          metadata$extent.ymin[which(metadata$speciesID==speciesID)][1],
+                          metadata$extent.ymax[which(metadata$speciesID==speciesID)][1]))
+  )
+}
+
+species_name <- "Amomum pterocarpum"
+speciesID <- metadata$speciesID[which(metadata$scientificname==species_name)][1]
+best_model <- metadata$model[which(metadata$scientificname==species_name)][1]
+variables <- c("Native region","Presence cells",paste(best_model))
+
+ras<-read_data(variables = variables, speciesID = speciesID, filelocation = ".../range_data.nc")
+plot(ras)
+
+
+```
+
+
+
+
+
 
 ### Metadata
 
 #### General species information
 
-speciesID, scientificname, redlistcategory, rank, family, order, class, subdivision, division, and data (type of provided data out of Native region, Occurrence records or Maxent prediction)
+speciesID, scientificname, redlistcategory, rank, family, order, class, subdivision, division, and data (type of provided data one of Native region, Occurrence records or Maxent prediction)
 
 
 #### Original extent of native regions, e.g. for cropping bands of the netCDF file:
