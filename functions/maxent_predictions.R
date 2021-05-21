@@ -230,10 +230,6 @@ generate_maxent_prediction <- function(species, occurrence_records, native_regio
       
       prediction_model0 <- dismo::predict(model0, crop_environmental_predictors, args = c("outputformat=cloglog"), na.rm = TRUE)
 
-      
-      prediction_model0_enm <- eval@predictions[[which(eval@results$settings==model0_results$settings)[1]]]
-      prediction_model0_enm2<-ENMeval::maxnet.predictRaster(model0, crop_environmental_predictors)
-      
       presence_data_raw <- data.frame(raster::extract(crop_environmental_predictors, occ_points_raw, fun=mean, na.rm=TRUE), presence=1)
       presence_data_raw<-na.exclude(presence_data_raw)
       background_data <- data.frame(raster::extract(crop_environmental_predictors, background_points_nat_reg, fun=mean, na.rm=TRUE), presence=0)
