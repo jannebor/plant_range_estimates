@@ -1,6 +1,7 @@
 ### R version 4.0.3
 ## code for generating Maxent predictions at different model settings
 # requires output of native_regions.R and occurrence_records.R
+# requires the Maxent software placed in the java folder of the R package "dismo"
 
 library(spThin)
 library(ENMeval)
