@@ -419,8 +419,8 @@ generate_maxent_prediction <- function(species, occurrence_records, native_regio
       thresholds<-list(threshold_model0,threshold_model1,threshold_model2,threshold_model3)
       names(thresholds)<-c("Model0","Model1","Model2","Model3")
       
-      data_list<-list(eval_results, model_results, models, EVs, predictions, evaluate, thresholds)
-      names(data_list)<-c("eval_results", "model_results", "models", "EVs", "predictions", "evaluate", "thresholds")
+      data_list<-list(eval_results, model_results, models, EVs, predictions, evaluate, thresholds, species)
+      names(data_list)<-c("eval_results", "model_results", "models", "EVs", "predictions", "evaluate", "thresholds", "species")
       return(data_list)
       
     }}
