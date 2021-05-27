@@ -10,17 +10,15 @@ Distribution data for individual species (e.g. range maps) is central for unders
 
 The dataset consists of native regions for 47,675 species retrieved from [Plants of the World online](http://plantsoftheworldonline.org/), density of available native occurrence records for 30,906 species retrieved from [GBIF](https://www.gbif.org/), and standardized, large-scale [Maxent](https://biodiversityinformatics.amnh.org/open_source/maxent/) range estimates for 27,208 species, highlighting environmentally suitable areas within species' native regions. The data can be explored using our  [data explorer](https://plant-ranges.indecol.no/).
 
-The full dataset can be downloaded [here](https://www.dropbox.com/sh/meeb6ru84778k94/AADrdCleHeMujip60C7EuMH1a?dl=1) at 30 arc minutes spatial resolution (approx. 56 km at the equator).
+The full dataset can be downloaded in 30 arc minutes spatial resolution (approx. 56 km at the equator).
 
-["range_data.nc""](https://www.dropbox.com/s/vqoiep3y8703yp5/range_estimates.nc?dl=1) contains all generated predictions based on the different models (i.e. raw data, presence cells and thinned presence cells), along with density of occurrence records and rasterized native regions.
+The suggested dataset “range_data.nc” contains the gathered and generated data allocated to three variables that can be called by specifying a varname: rasterized native WGSPRD-regions (varname: Native region) the number of occurrence records per cell (varname: Presence cells), and the best performing Maxent prediction (cloglog transformed, varname: Maxent prediction) for each species selected based on the highest harmonic mean between AUC and AUC<sub>PR</sub>.
 
-["range_estimates_suggested.nc"](https://www.dropbox.com/s/9az5yoq4ayx0139/range_estimates_suggested.nc?dl=1) contains only the best performing prediction for each species, selected based on AUC and AUC<sub>PR</sub>.
+“complete_dataset.zip” contains all generated netCDF files in cloglog and raw output format. The files “range_data_full.nc” and “range_data_full_rawOutput.nc” contain one Maxent prediction for each occurrence data type (i.e. varname: Model 1, Model 2 or Model 3), while “range_data.nc” and “range_data_rawOutput.nc” contain only the best performing Maxent prediction for each species (varname: Maxent prediction), selected based on the highest harmonic mean between AUC and AUCPR (see section Technical Validation). Number of occurrence records per cell (varname: Presence cells) and rasterized native WGSRPD-regions (varname: Native region) are provided in all netCDF files.
 
-The [metadata](https://www.dropbox.com/s/ktf1pk6hsk62d80/metadata_full.csv?dl=1) can be used to select appropriate cut-off thresholds for generating binary range maps, filter models based on species, performance or desired data types, and to look up the relevant study extent for masking individual predictions.
+Each band in the netCDF files assembles the mentioned variables for one species. The corresponding bands can be looked up in the metadata (i.e. speciesID).
 
-Underlying Maxent models are available as R objects upon request.
-
-For information about the given thresholds visit <https://www.rdocumentation.org/packages/dismo/versions/1.1-4/topics/threshold>.
+The metadata can be used to filter models based on species, performance or desired data types, to look up the relevant study extent for masking individual predictions, or to select different cut-off thresholds for generating binary range maps. For information about the given thresholds visit <https://www.rdocumentation.org/packages/dismo/versions/1.1-4/topics/threshold>.
 
 ------------------------------------------------------------------------
 

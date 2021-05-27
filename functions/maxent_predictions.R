@@ -152,7 +152,7 @@ background_points <- spTransform(background_points,CRS("+proj=longlat +datum=WGS
 
 generate_maxent_prediction <- function(species, occurrence_records, native_regions, 
                                        environmental_predictors, parallel, ncores, 
-                                       background_points, fishnet){
+                                       background_points, fishnet, args){
  
   wgsrpd_regional_list<-native_regions[[3]]
   wgsrpd_country_list<-native_regions[[2]]
@@ -229,7 +229,7 @@ generate_maxent_prediction <- function(species, occurrence_records, native_regio
       }
       
       
-      prediction_model0 <- dismo::predict(model0, crop_environmental_predictors, args = c("outputformat=cloglog"), na.rm = TRUE)
+      prediction_model0 <- dismo::predict(model0, crop_environmental_predictors, args = args, na.rm = TRUE)
 
       presence_data_raw <- data.frame(raster::extract(crop_environmental_predictors, occ_points_raw, fun=mean, na.rm=TRUE), presence=1)
       presence_data_raw<-na.exclude(presence_data_raw)
@@ -286,7 +286,7 @@ generate_maxent_prediction <- function(species, occurrence_records, native_regio
           model1 <- eval@models[[which(eval@results$settings==model1_results$settings)[1]]]
         }
         
-        prediction_model1 <- dismo::predict(model1, crop_environmental_predictors, args = c("outputformat=cloglog"), na.rm = TRUE)
+        prediction_model1 <- dismo::predict(model1, crop_environmental_predictors, args = args, na.rm = TRUE)
         
         evaluate_model1 <- dismo::evaluate(presence_data_raw, background_data, model1)
         threshold_model1 <- dismo::threshold(evaluate_model1)
@@ -338,7 +338,7 @@ generate_maxent_prediction <- function(species, occurrence_records, native_regio
           presence_data_cells <- data.frame(raster::extract(crop_environmental_predictors, presence_cells, fun=mean, na.rm=TRUE), presence=1)
           presence_data_cells <- na.exclude(presence_data_cells)
           
-          prediction_model2 <- dismo::predict(model2, crop_environmental_predictors, args = c("outputformat=cloglog"), na.rm = TRUE)
+          prediction_model2 <- dismo::predict(model2, crop_environmental_predictors, args = args, na.rm = TRUE)
           
           evaluate_model2 <- dismo::evaluate(presence_data_cells, background_data, model2)
           threshold_model2 <- dismo::threshold(evaluate_model2)
@@ -395,7 +395,7 @@ generate_maxent_prediction <- function(species, occurrence_records, native_regio
           training_data_raw <- rbind(presence_data_raw, background_data)
           training_data_raw <- na.exclude(training_data_raw)
           
-          prediction_model3 <- dismo::predict(model3, crop_environmental_predictors, args = c("outputformat=cloglog"), na.rm = TRUE)
+          prediction_model3 <- dismo::predict(model3, crop_environmental_predictors, args = args, na.rm = TRUE)
           evaluate_model3 <- dismo::evaluate(presence_data_thinned, background_data, model3)
           threshold_model3 <- dismo::threshold(evaluate_model3)
           thinEVs <-  var.importance(model3)
@@ -430,7 +430,8 @@ generate_maxent_prediction <- function(species, occurrence_records, native_regio
 ## usage
 maxent_prediction<-generate_maxent_prediction("Amomum pterocarpum", occurrence_records, 
                                               native_regions, environmental_predictors, 
-                                              parallel = TRUE, ncores = 4, background_points, fishnet)
+                                              parallel = TRUE, ncores = 4, background_points, fishnet,
+                                              args = c("outputformat=cloglog"))
 summary(maxent_prediction)
 
 plot(maxent_prediction$predictions$Model1)
