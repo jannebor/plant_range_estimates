@@ -9,14 +9,6 @@ library(sp)
 library(spThin)
 library(stringr)
 
-
-#library(ENMeval)
-#library(dismo)
-#library(ENMeval)
-#library(rgeos)
-#library(geosphere)
-#library(spThin)
-
 evaluate_maxent_prediction <- function(maxent_prediction, native_regions, 
                                      occurrence_records, environmental_predictors,
                                      fishnet, reference_poly=NULL){
