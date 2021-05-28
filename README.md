@@ -28,9 +28,16 @@ Species selection based on metadata:
 
 ```{r setup, include = FALSE}
 library(raster)
+library(ncdf4)
 
-# metadata of the suggested dataset (only the best prediction for each species)
-metadata<-read.csv(".../metadata.csv")
+path<-".../complete_dataset"
+
+dataset<-"basic"
+
+
+
+# metadata of the suggested default dataset (only the best prediction for each species)
+metadata<-read.csv(paste(path,dataset,"metadata_default.csv",sep="/"))
 
 # for a given species, e.g.:
 species_name <- "Amomum pterocarpum"
@@ -45,10 +52,11 @@ best_model <- metadata$model[which(metadata$scientificname==species_name)][1]
 
 # each band of the netCDF file assembles data for one species
 # variables represent the different data types within each band
-variable <- paste(best_model)
 
-ras <- raster("C:/Users/janbor/Documents/GitLab/plant_ranges/app/demo/range_data.nc", varname = variable, band = speciesID)
-# varname needs to be one of "Native region", "Presence cells", or a specific Model: "Model 1", "Model 2", "Model 3"
+ras <- raster(paste(path,dataset,"range_data_default.nc",sep="/"), varname = "Native region", band = speciesID)
+# varname needs to be one of "Native region", "Presence cells", "Maxent prediction", or
+# in full datasets a specific Model needs to be specified instead of "Maxent prediction": 
+# "Model 1", "Model 2", "Model 3"
 
 plot(ras)
 
@@ -59,9 +67,9 @@ All bands in the netCDF file have the same spatial extent, to crop to species-sp
 ```{r setup, include = FALSE}
 
 ras<-crop(ras, extent(metadata$extent.xmin[which(metadata$speciesID==speciesID)][1],
-                                        metadata$extent.xmax[which(metadata$speciesID==speciesID)][1],
-                                        metadata$extent.ymin[which(metadata$speciesID==speciesID)][1],
-                                        metadata$extent.ymax[which(metadata$speciesID==speciesID)][1]))
+                      metadata$extent.xmax[which(metadata$speciesID==speciesID)][1],
+                      metadata$extent.ymin[which(metadata$speciesID==speciesID)][1],
+                      metadata$extent.ymax[which(metadata$speciesID==speciesID)][1]))
 plot(ras)
 
 ```
@@ -72,13 +80,26 @@ the above described steps summarized in a function:
 
 ```{r setup, include = FALSE}
 
-read_data<-function(variables, speciesID, filelocation){
+read_data<-function(species_name, variables, path, dataset, format){
   
+  metadata<-read.csv(paste(path,"/",dataset,"/","metadata_",format,".csv",sep=""))
+  
+  speciesID <- metadata$speciesID[which(metadata$scientificname==species_name)][1]
+
   ras<-stack()
   
   for(v in variables){
-  ras<-stack(ras,raster(filelocation, varname = v, band = speciesID))
+    if(dataset=="advanced"){
+      metadata_suggested<-read.csv(paste(path,"/basic/","metadata_",format,".csv",sep=""))
+      if(v == "Maxent prediction"){
+        v <- metadata_suggested$model[which(metadata_suggested$scientificname==species_name)][1]
+      }
+    }
+    
+    ras<-stack(ras,raster(paste(path,"/",dataset,"/","range_data_",format,".nc",sep=""), varname = v, band = speciesID))
   }
+  
+  names(ras)<-variables
   
   return(crop(ras, extent(metadata$extent.xmin[which(metadata$speciesID==speciesID)][1],
                           metadata$extent.xmax[which(metadata$speciesID==speciesID)][1],
@@ -87,13 +108,12 @@ read_data<-function(variables, speciesID, filelocation){
   )
 }
 
-species_name <- "Amomum pterocarpum"
-speciesID <- metadata$speciesID[which(metadata$scientificname==species_name)][1]
-best_model <- metadata$model[which(metadata$scientificname==species_name)][1]
-variables <- c("Native region","Presence cells",paste(best_model))
+variables <- c("Native region","Presence cells","Maxent prediction")
 
-ras<-read_data(variables = variables, speciesID = speciesID, filelocation = ".../range_data.nc")
+ras<-read_data(species_name = "Pinus sylvestris", variables = variables, path = path, dataset = "basic", format = "default")
+
 plot(ras)
+
 
 
 ```
