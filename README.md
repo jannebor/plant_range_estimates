@@ -107,12 +107,6 @@ read_data<-function(species_name, variables, path, dataset, format){
                           metadata$extent.ymax[which(metadata$speciesID==speciesID)][1]))
   )
 }
-
-variables <- c("Native region","Presence cells","Maxent prediction")
-
-ras<-read_data(species_name = "Amomum pterocarpum", variables = variables, path = path, dataset = "basic", format = "raw")
-
-plot(ras)
 ```
 
 
