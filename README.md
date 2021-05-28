@@ -12,9 +12,10 @@ The dataset consists of native regions for 47,675 species retrieved from [Plants
 
 The full dataset can be downloaded in 30 arc minutes spatial resolution (approx. 56 km at the equator).
 
-The suggested dataset “range_data.nc” contains the gathered and generated data allocated to three variables that can be called by specifying a varname: rasterized native WGSPRD-regions (varname: Native region) the number of occurrence records per cell (varname: Presence cells), and the best performing Maxent prediction (cloglog transformed, varname: Maxent prediction) for each species selected based on the highest harmonic mean between AUC and AUC<sub>PR</sub>.
+The folder basic contains two netCDF files (default output and raw output) that assemble the best performing Maxent prediction (varname: Maxent prediction) for each species selected based on the highest harmonic mean between AUC and AUC<sub>PR</sub>, along with number of occurrence records per cell (varname: Presence cells) and rasterized native WGSRPD-regions (varname: Native region). 
 
-“complete_dataset.zip” contains all generated netCDF files in cloglog and raw output format. The files “range_data_full.nc” and “range_data_full_rawOutput.nc” contain one Maxent prediction for each occurrence data type (i.e. varname: Model 1, Model 2 or Model 3), while “range_data.nc” and “range_data_rawOutput.nc” contain only the best performing Maxent prediction for each species (varname: Maxent prediction), selected based on the highest harmonic mean between AUC and AUCPR (see section Technical Validation). Number of occurrence records per cell (varname: Presence cells) and rasterized native WGSRPD-regions (varname: Native region) are provided in all netCDF files.
+The folder advanced contains two netCDF files (default output and raw output). These files contain number of occurrence records per cell (varname: Presence cells), rasterized native WGSRPD-regions (varname: Native region), and one Maxent prediction for each occurrence data type (varname: Model 1, Model 2 or Model 3). 
+NOTE that varname Maxent prediction is not applicable
 
 Each band in the netCDF files assembles the mentioned variables for one species. The corresponding bands can be looked up in the metadata (i.e. speciesID).
 
@@ -27,17 +28,18 @@ The metadata can be used to filter models based on species, performance or desir
 Species selection based on metadata:
 
 ```{r setup, include = FALSE}
+
 library(raster)
 library(ncdf4)
 
-path<-".../complete_dataset"
+path <- ".../complete_dataset"
 
-dataset<-"basic"
+dataset <- "basic"
 
-
+format <- "default"
 
 # metadata of the suggested default dataset (only the best prediction for each species)
-metadata<-read.csv(paste(path,dataset,"metadata_default.csv",sep="/"))
+metadata<-read.csv(paste(path,"/",dataset,"/","metadata_",format,".csv",sep=""))
 
 # for a given species, e.g.:
 species_name <- "Amomum pterocarpum"
@@ -53,7 +55,7 @@ best_model <- metadata$model[which(metadata$scientificname==species_name)][1]
 # each band of the netCDF file assembles data for one species
 # variables represent the different data types within each band
 
-ras <- raster(paste(path,dataset,"range_data_default.nc",sep="/"), varname = "Native region", band = speciesID)
+ras <- raster(paste(path,"/",dataset,"/","range_data_",format,".nc",sep=""), varname = "Native region", band = speciesID)
 # varname needs to be one of "Native region", "Presence cells", "Maxent prediction", or
 # in full datasets a specific Model needs to be specified instead of "Maxent prediction": 
 # "Model 1", "Model 2", "Model 3"
@@ -113,8 +115,6 @@ variables <- c("Native region","Presence cells","Maxent prediction")
 ras<-read_data(species_name = "Pinus sylvestris", variables = variables, path = path, dataset = "basic", format = "default")
 
 plot(ras)
-
-
 
 ```
 
