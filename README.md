@@ -31,7 +31,7 @@ Species selection based on metadata:
 library(raster)
 library(ncdf4)
 
-path <- ".../complete_dataset"
+path <- "./doi_10.5061_dryad.qbzkh18h9__v3"
 
 dataset <- "basic"
 
@@ -85,13 +85,13 @@ read_data<-function(species_name, variables, path, dataset, format){
   metadata<-read.csv(paste(path,"/",dataset,"/","metadata_",format,".csv",sep=""))
   
   speciesID <- metadata$speciesID[which(metadata$scientificname==species_name)][1]
-
+  
   ras<-stack()
   
   for(v in variables){
     if(dataset=="advanced"){
-      metadata_suggested<-read.csv(paste(path,"/basic/","metadata_",format,".csv",sep=""))
       if(v == "Maxent prediction"){
+        metadata_suggested<-read.csv(paste(path,"/basic/","metadata_",format,".csv",sep=""))
         v <- metadata_suggested$model[which(metadata_suggested$scientificname==species_name)][1]
       }
     }
@@ -110,7 +110,7 @@ read_data<-function(species_name, variables, path, dataset, format){
 
 variables <- c("Native region","Presence cells","Maxent prediction")
 
-ras<-read_data(species_name = "Pinus sylvestris", variables = variables, path = path, dataset = "basic", format = "default")
+ras<-read_data(species_name = "Amomum pterocarpum", variables = variables, path = path, dataset = "basic", format = "raw")
 
 plot(ras)
 ```
