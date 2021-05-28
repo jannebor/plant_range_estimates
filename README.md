@@ -116,6 +116,15 @@ plot(ras)
 ```
 
 
+show Native regions, Occurrence data and best performing Maxent prediction (cloglog transformed) for <i>Amomum pterocarpum</i>
+
+```{r setup, include = FALSE}
+variables <- c("Native region","Presence cells","Maxent prediction")
+
+ras<-read_data(species_name = "Amomum pterocarpum", variables = variables, path = path, dataset = "basic", format = "default")
+
+plot(ras)
+```
 
 
 
