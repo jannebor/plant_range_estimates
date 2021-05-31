@@ -12,10 +12,10 @@ The dataset consists of native regions for 47,675 species retrieved from [Plants
 
 The full dataset can be downloaded in 30 arc minutes spatial resolution (approx. 56 km at the equator).
 
-The folder basic contains two netCDF files (default output and raw output) that assemble the best performing Maxent prediction (varname: Maxent prediction) for each species selected based on the highest harmonic mean between AUC and AUC<sub>PR</sub>, along with number of occurrence records per cell (varname: Presence cells) and rasterized native WGSRPD-regions (varname: Native region). 
+The folder basic contains two netCDF files (default output and raw output) that assemble the best performing Maxent prediction (<i>varname</i>: Maxent prediction) for each species selected based on the highest harmonic mean between AUC and AUC<sub>PR</sub>, along with number of occurrence records per cell (<i>varname</i>: Presence cells) and rasterized native WGSRPD-regions (<i>varname</i>: Native region). 
 
-The folder advanced contains two netCDF files (default output and raw output). These files contain number of occurrence records per cell (varname: Presence cells), rasterized native WGSRPD-regions (varname: Native region), and one Maxent prediction for each occurrence data type (varname: Model 1, Model 2 or Model 3). 
-NOTE that varname Maxent prediction is not applicable
+The folder advanced contains two netCDF files (default output and raw output). These files contain number of occurrence records per cell (<i>varname</i>: Presence cells), rasterized native WGSRPD-regions (<i>varname</i>: Native region), and one Maxent prediction for each occurrence data type (<i>varname</i>: Model 1, Model 2 or Model 3). 
+NOTE that <i>varname</i> "Maxent prediction" is not applicable
 
 Each band in the netCDF files assembles the mentioned variables for one species. The corresponding bands can be looked up in the metadata (i.e. speciesID).
 
