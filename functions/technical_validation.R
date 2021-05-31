@@ -27,7 +27,7 @@ occ_points_raw<-occurrence_records
 
 # presence cells for Model 2
 ras<-crop_environmental_predictors[[1]]
-presence_cells<-occ_points_Model1
+presence_cells<-occ_points_raw
 projection(presence_cells)<-projection(ras)
 projection(ras)<-projection(presence_cells)
 presence_cells<-elimCellDups(presence_cells, r=ras)
@@ -126,7 +126,6 @@ for (d in 1:length(datatypes)) {
       
       
       ### performance based on reference_poly input
-      if(exists("reference_poly")){
         if(length(reference_poly)>0){
           
           reference<-reference_poly
@@ -161,8 +160,7 @@ for (d in 1:length(datatypes)) {
             
             
           }
-        } 
-      } else {
+        } else {
           assign(paste("REFauc_",str_replace(datatypes[d]," ","_"),sep=""),NA)
           assign(paste("REFaucpr_",str_replace(datatypes[d]," ","_"),sep=""),NA)
           assign(paste("REFf1_score_",str_replace(datatypes[d]," ","_"),sep=""),NA)
