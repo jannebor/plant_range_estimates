@@ -40,8 +40,10 @@ format <- "default"
 # metadata of the suggested (basic) dataset (only the best prediction for each species)
 metadata<-read.csv(paste(path,"/",dataset,"/","metadata_",format,".csv",sep=""))
 
-# for a given species, e.g.:
+# for a specific species, e.g.:
 species_name <- "Amomum pterocarpum"
+# or a random species:
+species_name <- metadata$scientificname[runif(1, min=1, max=length(unique(metadata$scientificname)))]
 
 # speciesID
 speciesID <- metadata$speciesID[which(metadata$scientificname==species_name)][1]
@@ -110,12 +112,17 @@ read_data<-function(species_name, variables, path, dataset, format){
 ```
 
 
-show Native regions, Occurrence data and best performing Maxent prediction (cloglog transformed) for <i>Amomum pterocarpum</i>
+show Native regions, Occurrence data and best performing Maxent prediction (cloglog transformed)
 
 ```{r setup, include = FALSE}
+# define desired variables
 variables <- c("Native region","Presence cells","Maxent prediction")
 
-ras<-read_data(species_name = "Amomum pterocarpum", variables = variables, path = path, dataset = "basic", format = "default")
+# e.g. for a random species
+species_name <- metadata$scientificname[runif(1, min=1, max=length(unique(metadata$scientificname)))]
+
+# read the data
+ras<-read_data(species_name = species_name, variables = variables, path = path, dataset = "basic", format = "default")
 
 plot(ras)
 ```
