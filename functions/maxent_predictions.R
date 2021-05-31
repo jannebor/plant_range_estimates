@@ -304,7 +304,7 @@ generate_maxent_prediction <- function(species, occurrence_records, native_regio
       cellEVs<-NULL
       model2_eval_results<-NULL
       
-      if(length(presence_cells)>=5){
+      if(length(presence_cells)>=3){
         
         eval<-NULL
         if(length(presence_cells)>=25){
@@ -356,7 +356,7 @@ generate_maxent_prediction <- function(species, occurrence_records, native_regio
       thinEVs<-NULL
       model3_eval_results<-NULL
       
-      if(length(thinned_presence_cells)>=5){
+      if(length(thinned_presence_cells)>=3){
         
         eval<-NULL
         if(length(thinned_presence_cells)>=25){
