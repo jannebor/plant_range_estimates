@@ -10,7 +10,7 @@ Distribution data for individual species (e.g. range maps) is central for unders
 
 The dataset consists of native regions for 47,675 species retrieved from [Plants of the World online](http://plantsoftheworldonline.org/), density of available native occurrence records for 30,906 species retrieved from [GBIF](https://www.gbif.org/), and standardized, large-scale [Maxent](https://biodiversityinformatics.amnh.org/open_source/maxent/) range estimates for 27,208 species, highlighting environmentally suitable areas within species' native regions. The data can be explored using our  [data explorer](https://plant-ranges.indecol.no/).
 
-The full dataset can be downloaded in 30 arc minutes spatial resolution (approx. 56 km at the equator).
+The full dataset can be [downloaded](https://doi.org/10.5061/dryad.qbzkh18h9) in 30 arc minutes spatial resolution (approx. 56 km at the equator).
 
 The folder basic contains two netCDF files (default output and raw output) that assemble the best performing Maxent prediction (<i>varname</i>: Maxent prediction) for each species selected based on the highest harmonic mean between AUC and AUC<sub>PR</sub>, along with number of occurrence records per cell (<i>varname</i>: Presence cells) and rasterized native WGSRPD-regions (<i>varname</i>: Native region). 
 
