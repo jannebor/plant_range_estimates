@@ -13,9 +13,9 @@ load("data/tdwg_conversion_scheme")
 # web scraper function for data retrievel from plants of the world online
 pow_wgsrpd <- function(species, type){
   ppow <- NULL
-  
+      t0<-proc.time()
+
   while(length(ppow)<1){
-    t0<-proc.time()
     tryCatch({
       ppow<-get_pow(species, accepted = TRUE, rows = 1, messages=FALSE)
     }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
